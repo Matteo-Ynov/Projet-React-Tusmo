@@ -8,3 +8,15 @@
 h1 {
     color: white;
 }
+
+.tries{
+  text-align: center;
+}
+
+.try{
+  margin: 0;
+}
+
+.end-game-state{
+  font-size: 60px;
+}

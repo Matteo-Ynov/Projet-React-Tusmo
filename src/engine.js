@@ -1,3 +1,5 @@
+import correctWords from "../src/assets/correctWords.txt";
+
 export function getHints(word, input) {
     let [correct_letters, changed_word] = checkCorrectLetters(word, input);
     let misplaced_letters = checkMisplacedLetters(changed_word, input);
@@ -61,11 +63,38 @@ function joinCorrectAndMisplacedLetters(
 
 export const checkIfWordExist = (input) => {
     return new Promise((resolve, reject) => {
-        fetch(
-            `https://frenchwordsapi.herokuapp.com/api/Word?idOrName=${input}`
-        ).then((response) => {
-            const status = response["status"];
-            status === 200 ? resolve(true) : resolve(false);
-        });
+        fetch(correctWords)
+            .then((r) => r.text())
+            .then((text) => {
+                resolve(
+                    text
+                    .split("\n")
+                    .map((word) =>
+                        word
+                        .normalize("NFD")
+                        .replace(/[\u0300-\u036f]/g, "")
+                        .toUpperCase()
+                    )
+                    .includes(input.toUpperCase())
+                );
+            });
     });
 };
+
+export function createhintsarray(hints) {
+    let hintsarray = [];
+    for (const hint of hints) {
+        let show = "";
+        for (const value of hint) {
+            if (value === "well-placed") {
+                show += "🟥";
+            } else if ((value = "misplaced")) {
+                show += "🟠";
+            } else {
+                show += "⚫";
+            }
+        }
+        hintsarray.push(show);
+    }
+    return hintsarray;
+}
