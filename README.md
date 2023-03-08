@@ -1,4 +1,4 @@
-# BattleShip AI
+# Tusmo
 
 ## Sommaire :
 1. Présentation du projet
